@@ -1,11 +1,226 @@
 <!DOCTYPE html>
-<html>
-  <head>
-    <style>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1" />
+  <title>Pineapple Productions</title>
+  <style>
+    /* styles.css */
+
+    body {
+      font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+      margin: 0;
+      background-color: #fffaf0;
+      color: #333;
+    }
+
+    header {
+      background: #ffcc33;
+      padding: 1rem 2rem;
+      display: flex;
+      align-items: center;
+      gap: 1rem;
+      box-shadow: 0 2px 5px rgba(0,0,0,0.1);
       
-    </style>
-  </head>
-  <body>
-    <p>pototo studios</p>
-  </body>
+      /* Prevent header items from moving */
+      flex-shrink: 0;       /* prevent shrinking */
+      min-height: 70px;     /* fixed height matching content */
+    }
+
+    header img {
+      height: 50px;
+      flex-shrink: 0;
+    }
+
+    header h1 {
+      margin: 0;
+      line-height: 50px; /* vertically align with logo */
+      flex-shrink: 0;
+    }
+
+    nav {
+      background: #ffd966;
+      padding: 0.5rem 2rem;
+    }
+
+    #nav-menu {
+      list-style: none;
+      margin: 0;
+      padding: 0;
+      display: flex;
+      gap: 1.5rem;
+      cursor: pointer;
+    }
+
+    #nav-menu li {
+      padding: 0.3rem 0.6rem;
+      border-radius: 4px;
+      transition: background-color 0.3s ease;
+    }
+
+    #nav-menu li.active,
+    #nav-menu li:hover {
+      background-color: #ffb84d;
+      font-weight: bold;
+    }
+
+    main {
+      padding: 1.5rem 2rem;
+      max-width: 800px;
+      margin: 0 auto;
+      overflow: hidden;
+      transition: height 0.4s ease;
+    }
+
+    .section {
+      display: none;
+    }
+
+    .section.active {
+      display: block;
+    }
+
+    section h2 {
+      color: #cc6600;
+    }
+
+    ul {
+      padding-left: 1.2rem;
+    }
+
+    li {
+      margin: 0.5rem 0;
+      cursor: pointer;
+    }
+
+    footer {
+      text-align: center;
+      padding: 1rem 0;
+      background: #ffcc33;
+      font-size: 0.9rem;
+      box-shadow: 0 -1px 5px rgba(0,0,0,0.1);
+    }
+  </style>
+</head>
+<body>
+  <header>
+    <div class="logo">
+      <!-- Replace 'logo.png' with your logo file -->
+      <img src="https://www.pototo-studios.pineapple-productions.net/images/logo.png" alt="Logo TBA" />
+    </div>
+    <h1>Pineapple Productions</h1>
+  </header>
+
+  <nav>
+    <ul id="nav-menu">
+      <li data-section="about" class="active">About</li>
+      <!-- coming soon... <li data-section="merch">Merch</li> -->
+      <li data-section="games">Games</li>
+      <li data-section="contact">Contact</li>
+    </ul>
+  </nav>
+  <main>
+    <section id="about" class="section active">
+      <h2>About Us</h2>
+      <p>Pototo studios is the sister company of <a href="pineapple-productions.net">Pineapple Productions</a>.</p><br><p>We were founded in 2026 by <b>NoPotato</b>, who is also second-in-command in Pineapple Productions. We produce high-quality games, masterfully coded in Godot Engine.</p>
+    </section>
+    <section id="games" class="section">
+      <h2>Games</h2>
+      <p>No games yet, check back soon!</p>
+    </section>
+
+    <section id="contact" class="section">
+      <h2>Contact Us</h2>
+      <p>If you are having troubles with any of out services, please text 317-747-0428 with your issue and we will work on it as soon as possible.</p>
+    </section>-->
+  </main>
+
+  <footer>
+    <p>© 2026 Pototo Studios</p>
+  </footer>
+
+  <script>
+    const navItems = document.querySelectorAll('#nav-menu li');
+    const sections = document.querySelectorAll('main .section');
+    const main = document.querySelector('main');
+
+    function showSection(id) {
+      const currentActive = document.querySelector('main .section.active');
+      const nextActive = document.getElementById(id);
+      
+      if (currentActive === nextActive) return;
+
+      // Fade out current
+      currentActive.style.opacity = 1;
+      currentActive.style.transition = 'opacity 0.3s ease';
+      currentActive.style.opacity = 0;
+      
+      setTimeout(() => {
+        currentActive.classList.remove('active');
+        currentActive.style.opacity = '';
+        nextActive.style.opacity = 0;
+        nextActive.classList.add('active');
+
+        // Fade in next
+        nextActive.style.transition = 'opacity 0.3s ease';
+        nextActive.style.opacity = 1;
+
+        // Adjust main height smoothly
+        const sectionHeight = nextActive.offsetHeight;
+        main.style.transition = 'height 0.4s ease';
+        main.style.height = sectionHeight + 80 + 'px'; // padding compensation
+      }, 300);
+    }
+
+    navItems.forEach(item => {
+      item.addEventListener('click', () => {
+        navItems.forEach(i => i.classList.remove('active'));
+        item.classList.add('active');
+
+        // Add subtle scale animation on click
+        item.style.transition = 'transform 0.15s ease';
+        item.style.transform = 'scale(1.1)';
+        setTimeout(() => {
+          item.style.transform = 'scale(1)';
+        }, 150);
+
+        showSection(item.getAttribute('data-section'));
+      });
+    });
+
+    // Initialize main height for default active section on load with fade in
+    window.addEventListener('load', () => {
+      const active = document.querySelector('#nav-menu li.active');
+      if (active) {
+        const id = active.getAttribute('data-section');
+        const startingSection = document.getElementById(id);
+        startingSection.style.opacity = 0;
+        startingSection.classList.add('active');
+        const sectionHeight = startingSection.offsetHeight;
+        main.style.height = sectionHeight + 80 + 'px'; // padding compensation
+
+        setTimeout(() => {
+          startingSection.style.transition = 'opacity 0.5s ease';
+          startingSection.style.opacity = 1;
+        }, 50);
+      }
+    });
+
+    // Merch items click show details alert
+   /* const merchList = document.getElementById('merch-list');
+    merchList.querySelectorAll('li').forEach(item => {
+      item.addEventListener('click', () => {
+        alert(item.textContent + ' - ' + item.getAttribute('data-description'));
+      });
+    });*/
+
+    // Games items click show game info alert
+    const gamesList = document.getElementById('games-list');
+    gamesList.querySelectorAll('li').forEach(item => {
+      item.addEventListener('click', () => {
+        let href = "https://www.pototo-studios.pineapple-productions.net/" + item.getAttribute("link");
+      });
+    });
+  </script>
+</body>
 </html>
